@@ -1,38 +1,47 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "tubion",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Tubion",
+  "description": "All-in-one utility mod for TubNet.",
   "authors": [
-    "Me!"
+    "ApricotFarmer11",
+    "Callum_Is_Bad"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://forums.tubnet.gg/threads/tubion.5658/",
+    "sources": "https://github.com/ApricotFarmer/Tubion"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "Apache-2.0",
+  "icon": "assets/tubion/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
-      "net.fabricmc.example.ExampleMod"
+    "client": [
+      "io.github.apricotfarmer.mods.tubion.TubionMod"
+    ],
+    "modmenu": [
+      "io.github.apricotfarmer.mods.tubion.config.ModMenuIntegration"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "tubion.mixins.json"
   ],
 
   "depends": {
     "fabricloader": ">=0.14.6",
     "fabric": "*",
     "minecraft": "~1.18.2",
-    "java": ">=17"
+    "java": ">=17",
+    "cloth-config2": ">=6.3.81"
   },
-  "suggests": {
-    "another-mod": "*"
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/e3bsmguYZU"
+      }
+    }
   }
 }
