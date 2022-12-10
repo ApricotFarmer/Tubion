@@ -30,11 +30,9 @@ public class TubionMod implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		AutoConfig.register(ModConfig.class, Toml4jConfigSerializer::new);
-		LOGGER.info("Loading Features");
 		Discord featureDiscord = new Discord();
 		featureDiscord.registerEvents();
-		LOGGER.info("Features initialized");
-		ScoreboardObjectiveUpdateCallback.EVENT.register(TubionMod::onScoreboardUpdate);
+		ClientTickEvents.END_CLIENT_TICK.register(this::onTick);
 		TubnetConnectionCallbacks.CONNECTED.register(() -> {
 			connectedToTubNet = true;
 		});
@@ -43,9 +41,9 @@ public class TubionMod implements ClientModInitializer {
 		});
 	}
 
-	private static void onScoreboardUpdate() {
+
+	private void onTick(final MinecraftClient client) {
 		if (connectedToTubNet) {
-			MinecraftClient client = MinecraftClient.getInstance();
 			if (client.world != null) {
 				if (client.player != null) {
 					Scoreboard board = client.player.getScoreboard();

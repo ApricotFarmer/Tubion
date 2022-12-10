@@ -5,7 +5,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
 @Config(name = "tubion")
-@Config.Gui.Background("tubion:icon.png")
+@Config.Gui.Background("tubion:option_background.png")
 public class ModConfig implements ConfigData {
     @ConfigEntry.Gui.CollapsibleObject
     public FeatureSettings featureSettings = new FeatureSettings();

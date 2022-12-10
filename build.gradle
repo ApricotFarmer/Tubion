@@ -11,6 +11,11 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
+configurations {
+	shade
+	implementation.extendsFrom(shade)
+}
+
 repositories {
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
@@ -32,7 +37,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Dependencies
-	implementation "com.github.JnCrMx:discord-game-sdk4j:0.5.5"
+	shade "com.github.JnCrMx:discord-game-sdk4j:0.5.5"
 	modApi("me.shedaniel.cloth:cloth-config-fabric:6.3.81") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
@@ -48,11 +53,15 @@ processResources {
 }
 
 shadowJar {
-	dependencies {
-		exclude(dependency("com.mojang:minecraft:${project.minecraft_version}"))
-		exclude(dependency("net.fabricmc:fabric-loader:${project.loader_version}"))
-		exclude(dependency("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"))
-	}
+	exclude("META-INF")
+	exclude("META-INF/**")
+	configurations = [project.configurations.shade]
+}
+remapJar {
+	dependsOn(shadowJar)
+	mustRunAfter(shadowJar)
+	input.set(shadowJar.archiveFile)
+	archiveClassifier = null
 }
 
 tasks.withType(JavaCompile).configureEach {
