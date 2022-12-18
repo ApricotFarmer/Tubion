@@ -1,6 +1,5 @@
 package io.github.apricotfarmer11.mods.tubion.feat;
 
-import io.github.apricotfarmer.mods.tubion.event.*;
 import io.github.apricotfarmer11.mods.tubion.event.*;
 import io.github.apricotfarmer11.mods.tubion.event.tubnet.TubnetConnectionCallbacks;
 import io.github.apricotfarmer11.mods.tubion.feat.compactchat.CompactChat;
