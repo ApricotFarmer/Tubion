@@ -20,10 +20,10 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "io.github.apricotfarmer.mods.tubion.TubionMod"
+      "io.github.apricotfarmer11.mods.tubion.TubionMod"
     ],
     "modmenu": [
-      "io.github.apricotfarmer.mods.tubion.config.ModMenuIntegration"
+      "io.github.apricotfarmer11.mods.tubion.config.ModMenuIntegration"
     ]
   },
   "mixins": [
