@@ -4,13 +4,13 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.util.ActionResult;
 
-public interface PlayerSendMessageCallback {
-    Event<PlayerSendMessageCallback> EVENT = EventFactory.createArrayBacked(PlayerSendMessageCallback.class,
+public interface ClientSendMessageCallback {
+    Event<ClientSendMessageCallback> EVENT = EventFactory.createArrayBacked(ClientSendMessageCallback.class,
             (listeners) -> (message) -> {
-                for (PlayerSendMessageCallback listener : listeners) {
+                for (ClientSendMessageCallback listener : listeners) {
                     ActionResult result = listener.interact(message);
 
-                    if (result != ActionResult.PASS) {
+                    if (result != ActionResult.PASS && result != null) {
                         return result;
                     }
                 }

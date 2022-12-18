@@ -16,12 +16,14 @@ import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class SDKHelper {
-    public static Logger LOGGER = LoggerFactory.getLogger("Tubion/Discord.SDKHelper");
+// Taken partially from HyCord by DeDiamondPro
+public class DiscordGameSDKLoader {
+    public static Logger LOGGER = LoggerFactory.getLogger("Tubion/Discord");
     public static void loadSDK() {
+        LOGGER.info("Loading Discord GameSDK v3.1.0");
         File home = new File("config/tubion/discord");
         if (!home.exists() && !home.mkdirs()) {
-            throw new IllegalStateException("For some reason, FS did not let us create the Discord GameSDK folder :(");
+            throw new IllegalStateException("[DiscordGameSDKLoader] For some reason, FS did not let us create the Discord GameSDK folder :(");
         }
         String fileName;
         if (SystemUtils.IS_OS_WINDOWS)
@@ -41,14 +43,14 @@ public class SDKHelper {
             try {
                 downloadSDK(sdk, fileName);
             } catch(IOException ex) {
-                LOGGER.error("Failed to download SDK from Discord: " + ex.getMessage());
+                LOGGER.error("[DiscordGameSDKLoader] Failed to download SDK from Discord: " + ex.getMessage());
             }
         }
         if (!jni.exists()) {
             try {
                 extractJNI(jni);
             } catch(IOException ex) {
-                LOGGER.error("Failed to extract JNI: " + ex.getMessage());
+                LOGGER.error("[DiscordGameSDKLoader] Failed to extract JNI: " + ex.getMessage());
             }
         }
         if (sdk.exists() && jni.exists()) {
@@ -66,7 +68,7 @@ public class SDKHelper {
         ZipEntry entry;
         while ((entry = zipStream.getNextEntry()) != null) {
             if (entry.getName().equals("lib/" + architecture + "/" + fileName)) {
-                LOGGER.info("[Downloader] Successfully found SDK!");
+                LOGGER.info("[DiscordGameSDKLoader Downloader] Successfully found SDK!");
                 Files.copy(zipStream, sdk.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 break;
             }
@@ -88,5 +90,6 @@ public class SDKHelper {
             System.load(sdk.getAbsolutePath());
         System.load(jni.getAbsolutePath());
         Core.initDiscordNative(sdk.getAbsolutePath());
+        LOGGER.info("[DiscordGameSDKLoader] Discord GameSDK Library 3.1.0 initialized");
     }
 }

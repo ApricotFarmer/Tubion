@@ -2,7 +2,6 @@
   "text.autoconfig.tubion.title": "Tubion Settings",
   "text.autoconfig.tubion.option.featureSettings": "Features",
   "text.autoconfig.tubion.option.featureSettings.featureDiscordSettings": "Discord",
-  "text.autoconfig.tubion.option.featureSettings.featureDiscordSettings.enabled": "Enable Discord",
   "text.autoconfig.tubion.option.developerSettings": "Developer Settings",
   "text.autoconfig.tubion.option.developerSettings.hideEntityDataErrors": "Hide Entity Data Errors"
 }

@@ -8,9 +8,7 @@
     "ClientPlayerEntityMixin",
     "DataTrackerMixin",
     "ClientWorldMixin",
-    "ScoreboardMixin",
-    "ClientPlayNetworkHandlerMixin",
-    "InGameHudMixin"
+    "ClientPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

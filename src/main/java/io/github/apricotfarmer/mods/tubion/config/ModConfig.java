@@ -15,7 +15,6 @@ public class ModConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public FeatureDiscordSettings featureDiscordSettings = new FeatureDiscordSettings();
         public static class FeatureDiscordSettings {
-            public boolean enabled = true;
         }
     }
     public static class DeveloperSettings {

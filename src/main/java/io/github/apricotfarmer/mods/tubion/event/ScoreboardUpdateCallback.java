@@ -5,12 +5,12 @@ import io.github.apricotfarmer.mods.tubion.event.tubnet.TubnetConnectionCallback
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
-public interface ScoreboardObjectiveUpdateCallback {
-    Event<ScoreboardObjectiveUpdateCallback> EVENT = EventFactory.createArrayBacked(ScoreboardObjectiveUpdateCallback.class,
+public interface ScoreboardUpdateCallback {
+    Event<ScoreboardUpdateCallback> EVENT = EventFactory.createArrayBacked(ScoreboardUpdateCallback.class,
             (listeners) -> () -> {
                 try {
                     TubnetConnectionCallbacks.CONNECTED.invoker().connected();
-                    for (ScoreboardObjectiveUpdateCallback listener : listeners) {
+                    for (ScoreboardUpdateCallback listener : listeners) {
                         listener.interact();
                     }
                     return;

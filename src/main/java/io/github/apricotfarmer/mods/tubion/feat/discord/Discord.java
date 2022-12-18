@@ -6,37 +6,58 @@ import de.jcm.discordgamesdk.DiscordEventAdapter;
 import de.jcm.discordgamesdk.GameSDKException;
 import de.jcm.discordgamesdk.activity.Activity;
 import io.github.apricotfarmer.mods.tubion.TubionMod;
-import io.github.apricotfarmer.mods.tubion.event.PlayerSendMessageCallback;
-import io.github.apricotfarmer.mods.tubion.event.ScoreboardObjectiveUpdateCallback;
-import io.github.apricotfarmer.mods.tubion.event.TitleSetCallback;
-import io.github.apricotfarmer.mods.tubion.event.WorldLoadCallback;
-import io.github.apricotfarmer.mods.tubion.event.tubnet.TubnetConnectionCallbacks;
+import io.github.apricotfarmer.mods.tubion.feat.EventType;
 import io.github.apricotfarmer.mods.tubion.feat.Feature;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import io.github.apricotfarmer.mods.tubion.helper.ChatHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.scoreboard.ScoreboardObjective;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.ActionResult;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class Discord implements Feature {
-    public static Logger LOGGER = LoggerFactory.getLogger("Tubion/Discord");
-    public static MinecraftClient CLIENT = MinecraftClient.getInstance();
+public class Discord extends Feature {
+    public static final Logger LOGGER = LoggerFactory.getLogger("Tubion/Discord");
+    public static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     public static Core discord;
+    public static boolean enabled = false;
+    private static final MutableText BASE = ChatHelper.getChatPrefixWithFeature(
+            Text.literal("Discord").formatted(Formatting.BOLD, Formatting.DARK_PURPLE)
+    );
     private int threads = 0;
-    private int cbThreads = 0;
     private boolean initialized = false;
     private String last = "";
     private Instant time;
     private String gamemode;
     private String gamestate;
-    private String lastTitle;
     private boolean inQueue = false;
+    public Discord() {
+        super(new EventType[]{EventType.TICK, EventType.WORLD_LOAD, EventType.TITLE_SET, EventType.SCOREBOARD_UPDATE});
+        // Load SDK at startup
+        DiscordGameSDKLoader.loadSDK();
+    }
+    public void onEnable() {
+        this.enabled = true;
+        if (TubionMod.connectedToTubNet) {
+            onWorldLoad(); // Just initialize the RPC. No need for other stuff
+        }
+    }
+    public void onDisable() {
+        this.enabled = false;
+        if (discord != null && discord.isOpen()) {
+            discord.activityManager().clearActivity();
+            try {
+                discord.close();
+            } catch(GameSDKException ex) {}
+            discord = null;
+            initialized = false;
+        }
+    }
+
+    @Override
     public void onTick() {
         if (discord != null && discord.isOpen()) {
             try {
@@ -46,71 +67,47 @@ public class Discord implements Feature {
             }
         }
     }
-    public void registerEvents() {
-        WorldLoadCallback.EVENT.register(() -> {
-            if (TubionMod.connectedToTubNet && (discord == null || !discord.isOpen())) {
-                (new Thread("Discord Thread #" + ++threads) {
-                    @Override
-                    public void run() {
-                        SDKHelper.loadSDK();
-                        initializeRPC();
-                        updateRPC();
-                    }
-                }).start();
-            }
-        });
-
-        TubnetConnectionCallbacks.DISCONNECTED.register(() -> {
-            if (discord != null && discord.isOpen()) {
-                try {
-                    discord.activityManager().clearActivity();
-                    discord.close();
-                } catch (Exception ex) {
-                    LOGGER.warn("Ignoring error from GameSDK close: " + ex.toString());
+    @Override
+    public void onWorldLoad() {
+        time = Instant.now();
+        gamemode = "Lobby";
+        gamestate = "";
+        inQueue = false;
+        if (discord == null || !discord.isOpen()) {
+            (new Thread("Discord Initializer Thread #" + ++threads) {
+                @Override
+                public void run() {
+                    initializeRPC();
+                    updateRPC();
                 }
-            }
-        });
-        PlayerSendMessageCallback.EVENT.register((message) -> {
-            if (TubionMod.connectedToTubNet && message.toLowerCase().equals("/tubion discord reconnect")) {
-                CLIENT.inGameHud.getChatHud().addMessage(new LiteralText("[Tubion] Attempting to reconnect to Discord.."));
-                if (discord != null && discord.isOpen()) {
-                    discord.close();
-                    discord = null;
-                    initialized = false;
-                }
-                if (initializeRPC()) {
-                    CLIENT.inGameHud.getChatHud().addMessage(new LiteralText("[Tubion] Connected to Discord"));
-                }
-                return ActionResult.CONSUME;
-            }
-            return ActionResult.PASS;
-        });
-        WorldLoadCallback.EVENT.register(() -> {
-            time = Instant.now();
-            gamemode = "Lobby";
-            gamestate = "";
-            inQueue = false;
-        });
-        ScoreboardObjectiveUpdateCallback.EVENT.register(() -> {
-            if (discord != null && discord.isOpen()) {
-                updateRPC();
-            }
-        });
-        ClientTickEvents.END_CLIENT_TICK.register((client) -> {
-            if (discord != null && discord.isOpen()) {
-                try {
-                    discord.runCallbacks();
-                } catch(Exception ex) {
-                    LOGGER.info("Error when running callbacks: " + ex.toString());
-                }
-            }
-        });
-        TitleSetCallback.EVENT.register((title) -> {
-            lastTitle = title.getString();
-            if (discord != null && discord.isOpen()) {
-                updateRPC();
-            }
-        });
+            }).start();
+        }
+    }
+    public void reloadClient() {
+        CLIENT.inGameHud.getChatHud().addMessage(BASE.copy().append("Reconnecting to Discord"));
+        if (discord != null && discord.isOpen()) {
+            discord.close();
+            discord = null;
+            initialized = false;
+        }
+        if (initializeRPC()) {
+            CLIENT.inGameHud.getChatHud().addMessage(BASE.copy().append("Connected to Discord"));
+        } else {
+            CLIENT.inGameHud.getChatHud().addMessage(this.BASE.copy().append("Failed to connect to Discord. Run ").append(Text.literal("/tubion discord reconnect").formatted(Formatting.BOLD).append(" to attempt to reconnect.")));
+        }
+    }
+    @Override
+    public void onTitleSet() {
+        safeUpdateRPC();
+    }
+    @Override
+    public void onScoreboardUpdate() {
+        safeUpdateRPC();
+    }
+    public void safeUpdateRPC() {
+        if (discord != null && discord.isOpen()) {
+            updateRPC();
+        }
     }
     private boolean initializeRPC() {
         CreateParams discordParams = new CreateParams();
@@ -127,7 +124,7 @@ public class Discord implements Feature {
             LOGGER.error("An error occurred while attempting to initialize the SDK:\n" + ex.toString());
             initialized = false;
             assert MinecraftClient.getInstance().player != null;
-            CLIENT.inGameHud.getChatHud().addMessage(new LiteralText("[Tubion] Failed to initialize feature \"Discord\". Please run /tubion discord reconnect to reconnect."));
+            CLIENT.inGameHud.getChatHud().addMessage(this.BASE.copy().append("Failed to connect to Discord. Run ").append(Text.literal("/tubion discord reconnect").formatted(Formatting.BOLD).append(" to attempt to reconnect.")));
             return false;
         }
     }
@@ -139,7 +136,6 @@ public class Discord implements Feature {
                 ScoreboardObjective objective = CLIENT.world.getScoreboard().getObjectiveForSlot(1);
                 if (objective == null) return;
                 String game = objective.getDisplayName().getString().replaceAll("[^a-zA-Z0-9 ]", "");
-                String gamemode;
                 boolean isGame = false;
                 if (game.equals("TUBNET")) {
                     gamemode = "Lobby";
@@ -166,7 +162,7 @@ public class Discord implements Feature {
                     try {
                         String row = TubionMod.scoreboard[2].toString();
                         if (row.toLowerCase().contains("in-queue")) {
-                            gamestate = "In the queue";
+                            gamestate = "In queue";
                             inQueue = true;
                         } else if (inQueue) {
                             time = Instant.now();
