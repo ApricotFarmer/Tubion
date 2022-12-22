@@ -1,7 +1,8 @@
 package io.github.apricotfarmer11.mods.tubion.feat.compactchat;
 
+import io.github.apricotfarmer11.mods.tubion.event.ReceiveChatMessageCallback;
 import io.github.apricotfarmer11.mods.tubion.feat.EventType;
-import io.github.apricotfarmer11.mods.tubion.feat.Feature;
+import io.github.apricotfarmer11.mods.tubion.core.Feature;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.text.Text;
@@ -16,12 +17,13 @@ public class CompactChat extends Feature {
     public static String ID = "compactchat";
     public static Logger LOGGER = LoggerFactory.getLogger("Tubion/CompactChat");
     public static boolean enabled = false;
-    private String lastMessage = "";
+    private static String lastMessage = "";
     private int line;
-    private int amount;
+    private static int amount;
 
     public CompactChat() {
-        super(new EventType[]{EventType.PLAYER_CHAT_MESSAGE});
+        super(new EventType[]{});
+        ReceiveChatMessageCallback.EVENT.register(this::onChat);
     }
     public ActionResult onChat(Text text) {
         ChatHud chat = CLIENT.inGameHud.getChatHud();
