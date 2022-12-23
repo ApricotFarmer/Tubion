@@ -18,7 +18,7 @@ public class DataTrackerMixin {
 
     @Inject(at = @At("HEAD"), method = "copyToFrom", cancellable = true)
     private <T> void copyToFrom(DataTracker.Entry<T> to, DataTracker.Entry<?> from, CallbackInfo ci) {
-        if (!Objects.equals(from.getData().getType(), to.getData().getType()) && TubionMod.getConfig().developerSettings.hideEntityDataErrors) {
+        if (!Objects.equals(from.getData().getType(), to.getData().getType()) && TubionMod.getConfig().hideEntityDataErrors) {
             ci.cancel();
         }
     }

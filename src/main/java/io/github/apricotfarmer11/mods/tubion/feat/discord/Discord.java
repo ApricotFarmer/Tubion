@@ -6,11 +6,10 @@ import de.jcm.discordgamesdk.DiscordEventAdapter;
 import de.jcm.discordgamesdk.GameSDKException;
 import de.jcm.discordgamesdk.activity.Activity;
 import io.github.apricotfarmer11.mods.tubion.TubionMod;
+import io.github.apricotfarmer11.mods.tubion.core.*;
 import io.github.apricotfarmer11.mods.tubion.feat.EventType;
-import io.github.apricotfarmer11.mods.tubion.feat.Feature;
 import io.github.apricotfarmer11.mods.tubion.helper.ChatHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -57,17 +56,16 @@ public class Discord extends Feature {
         }
     }
 
-    @Override
     public void onTick() {
         if (discord != null && discord.isOpen()) {
             try {
+                updateRPC();
                 discord.runCallbacks();
             } catch(Exception ex) {
                 LOGGER.info("Error when running callbacks: " + ex.toString());
             }
         }
     }
-    @Override
     public void onWorldLoad() {
         time = Instant.now();
         gamemode = "Lobby";
@@ -78,7 +76,6 @@ public class Discord extends Feature {
                 @Override
                 public void run() {
                     initializeRPC();
-                    updateRPC();
                 }
             }).start();
         }
@@ -96,11 +93,9 @@ public class Discord extends Feature {
             CLIENT.inGameHud.getChatHud().addMessage(this.BASE.copy().append("Failed to connect to Discord. Run ").append(Text.literal("/tubion discord reconnect").formatted(Formatting.BOLD).append(" to attempt to reconnect.")));
         }
     }
-    @Override
     public void onTitleSet() {
         safeUpdateRPC();
     }
-    @Override
     public void onScoreboardUpdate() {
         safeUpdateRPC();
     }
@@ -130,59 +125,42 @@ public class Discord extends Feature {
     }
     private void updateRPC() {
         if (discord == null && !discord.isOpen()) return;
+        if (!TubionMod.getConfig().enableDiscordRPC) return;
         try (Activity activity = new Activity()) {
-            if (TubionMod.scoreboard.length > 0) {
-                if (!(CLIENT.world != null && CLIENT.world.getScoreboard() != null)) return;
-                ScoreboardObjective objective = CLIENT.world.getScoreboard().getObjectiveForSlot(1);
-                if (objective == null) return;
-                String game = objective.getDisplayName().getString().replaceAll("[^a-zA-Z0-9 ]", "");
-                boolean isGame = false;
-                if (game.equals("TUBNET")) {
-                    gamemode = "Lobby";
-                } else if (game.equals(" LIGHTSTRIKE ")) {
-                    gamemode = "Light Strike";
-                    isGame = true;
-                } else if (game.equals("CRYSTAL RUSH")) {
-                    gamemode = "Crystal Rush";
-
-                    String row = TubionMod.scoreboard[TubionMod.scoreboard.length - 1].toString();
-                    if (row.toString().contains("duos")) {
-                        gamemode += " (Duos)";
-                    } else if (row.toString().contains("solos")) {
+            TubNet Tubnet = TubNet.getTubNet();
+            TubnetGame game = Tubnet.getCurrentGame();
+            if (game != null) {
+                String gamemode = game.getName();
+                if (TubNet.getTubNet().getCurrentGameType() == GameType.CRYSTAL_RUSH) {
+                    if (game.getTeamType() == TeamType.SOLOS) {
                         gamemode += " (Solos)";
+                    } else {
+                        gamemode += " (Duos)";
                     }
-                    isGame = true;
-                } else {
-                    gamemode = game;
+                }
+                String gamestate = "In game";
+                if (game.isInQueue()) {
+                    gamestate = "In queue";
+                    inQueue = true;
+                } else if (inQueue) {
+                    time = Instant.now();
+                    inQueue = false;
                 }
                 if (!last.equals(gamemode)) {
-                    LOGGER.info("New game: " + gamemode + " (" + game + ")");
-                }
-                if (isGame && TubionMod.scoreboard.length >= 3) {
-                    try {
-                        String row = TubionMod.scoreboard[2].toString();
-                        if (row.toLowerCase().contains("in-queue")) {
-                            gamestate = "In queue";
-                            inQueue = true;
-                        } else if (inQueue) {
-                            time = Instant.now();
-                            inQueue = false;
-                        } else {
-                            gamestate = "In game";
-                        }
-                    } catch(Exception ex) {
-                        ex.printStackTrace();
-                    }
+                    LOGGER.info("New game identified: " + gamemode);
                 }
                 last = gamemode;
                 activity.setDetails(gamemode);
-                activity.setState(gamestate);
+                if (Tubnet.getCurrentGameType() != GameType.LOBBY) {
+                    activity.setState(gamestate);
+                }
             } else {
                 activity.setDetails("Unknown");
             }
             if (time == null) time = Instant.now();
             activity.timestamps().setStart(Instant.ofEpochSecond(time.toEpochMilli()));
             activity.assets().setLargeImage("tubnet_logo");
+            activity.assets().setLargeText("Powered by Tubion v" + TubionMod.VERSION);
             discord.activityManager().updateActivity(activity);
         } catch(GameSDKException ex) {
             LOGGER.error("Failed to send Activity Update: " + ex.toString());

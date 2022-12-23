@@ -1,9 +1,11 @@
 package io.github.apricotfarmer11.mods.tubion;
 
 import io.github.apricotfarmer11.mods.tubion.commands.CommandRegistrar;
+import io.github.apricotfarmer11.mods.tubion.config.ClothConfigIntegration;
 import io.github.apricotfarmer11.mods.tubion.config.ModConfig;
+import io.github.apricotfarmer11.mods.tubion.core.TubNet;
 import io.github.apricotfarmer11.mods.tubion.event.tubnet.TubnetConnectionCallbacks;
-import io.github.apricotfarmer11.mods.tubion.feat.FeatureLoader;
+import io.github.apricotfarmer11.mods.tubion.core.FeatureLoader;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
@@ -26,7 +28,7 @@ public class TubionMod implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		AutoConfig.register(ModConfig.class, Toml4jConfigSerializer::new);
+		ClothConfigIntegration.init();
 		ClientTickEvents.END_CLIENT_TICK.register(this::onTick);
 		TubnetConnectionCallbacks.CONNECTED.register(() -> {
 			connectedToTubNet = true;
@@ -35,6 +37,7 @@ public class TubionMod implements ClientModInitializer {
 			connectedToTubNet = false;
 		});
 		// Init FeatureLoader
+		new TubNet();
 		new FeatureLoader();
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandRegistrar.init(dispatcher, registryAccess));
 	}
@@ -54,6 +57,6 @@ public class TubionMod implements ClientModInitializer {
 	}
 
 	public static ModConfig getConfig() {
-		return AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+		return ClothConfigIntegration.INSTANCE;
 	}
 }

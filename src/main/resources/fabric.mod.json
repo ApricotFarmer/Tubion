@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Tubion",
-  "description": "All-in-one utility mod for TubNet.",
+  "description": "All-in-one utility mod for TubNet",
   "authors": [
     "ApricotFarmer11",
     "Callum_Is_Bad"
@@ -15,7 +15,7 @@
   },
 
   "license": "Apache-2.0",
-  "icon": "assets/tubion/icon.png",
+  "icon": "assets/icon.png",
 
   "environment": "client",
   "entrypoints": {
