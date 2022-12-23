@@ -69,7 +69,7 @@ modrinth {
 	token = System.getenv("MODRINTH_TOKEN")
 	projectId = "tubion"
 	versionNumber = "${project.version}"
-	versionType = "beta"
+	versionType = "alpha"
 	uploadFile = remapJar
 	gameVersions = ["1.19.2"]
 	loaders = ["fabric"]

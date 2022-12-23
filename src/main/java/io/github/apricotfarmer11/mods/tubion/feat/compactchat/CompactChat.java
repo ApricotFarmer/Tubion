@@ -1,5 +1,6 @@
 package io.github.apricotfarmer11.mods.tubion.feat.compactchat;
 
+import io.github.apricotfarmer11.mods.tubion.core.TubNet;
 import io.github.apricotfarmer11.mods.tubion.event.ReceiveChatMessageCallback;
 import io.github.apricotfarmer11.mods.tubion.feat.EventType;
 import io.github.apricotfarmer11.mods.tubion.core.Feature;
@@ -26,8 +27,8 @@ public class CompactChat extends Feature {
         ReceiveChatMessageCallback.EVENT.register(this::onChat);
     }
     public ActionResult onChat(Text text) {
+        if (!TubNet.connected) return ActionResult.PASS;
         ChatHud chat = CLIENT.inGameHud.getChatHud();
-        LOGGER.info("Prev: " + lastMessage + " | Next: " + text.getString());
         if (lastMessage.equals(text.getString())) {
             List<ChatHudLine.Visible> visibleMessages = ((VisibleMessageGetter) chat).getVisibleMessages();
             visibleMessages.remove(0);

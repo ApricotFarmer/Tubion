@@ -60,7 +60,6 @@ public class FeatureLoader {
         TubnetConnectionCallbacks.CONNECTED.register(() -> {
             if (connected) return;
             connected = true;
-            LOGGER.info("Established connection with TubNet");
             // TODO: Wait for RM reload to complete, then call this
             features.forEach((id, feat) -> {
                 feat.enabled = true;
@@ -70,7 +69,6 @@ public class FeatureLoader {
         TubnetConnectionCallbacks.DISCONNECTED.register(() -> {
             if (!connected) return;
             connected = false;
-            LOGGER.info("Disconnected from TubNet");
             // TODO: Wait for RM reload to complete, then call this
             features.forEach((id, feat) -> {
                 feat.enabled = false;
