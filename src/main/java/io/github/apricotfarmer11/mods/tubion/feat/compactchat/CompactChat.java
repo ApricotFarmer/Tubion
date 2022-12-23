@@ -32,9 +32,9 @@ public class CompactChat extends Feature {
         ChatHud chat = CLIENT.inGameHud.getChatHud();
         if (lastMessage.equals(text.getString())) {
             //#if MC>=11902
-            //$$ List<ChatHudLine.Visible> visibleMessages = ((VisibleMessageGetter) chat).getVisibleMessages();
+            List<ChatHudLine.Visible> visibleMessages = ((VisibleMessageGetter) chat).getVisibleMessages();
             //#else
-            List<ChatHudLine> visibleMessages = ((VisibleMessageGetter) chat).getVisibleMessages();
+            //$$ List<ChatHudLine> visibleMessages = ((VisibleMessageGetter) chat).getVisibleMessages();
             //#endif
             visibleMessages.remove(0);
             amount++;

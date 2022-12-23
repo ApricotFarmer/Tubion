@@ -2,11 +2,11 @@ package io.github.apricotfarmer11.mods.tubion.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 //#if MC>=11902
-//$$ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
-//$$ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 //#else
-import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+//$$ import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
+//$$ import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 //#endif
 import io.github.apricotfarmer11.mods.tubion.core.FeatureLoader;
 import io.github.apricotfarmer11.mods.tubion.feat.discord.Discord;

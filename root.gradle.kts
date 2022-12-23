@@ -3,10 +3,9 @@ import gg.essential.gradle.util.*
 plugins {
     kotlin("jvm") version "1.6.10" apply false
     id("gg.essential.multi-version.root")
-    id("gg.essential.multi-version.api-validation")
 }
 
-version = versionFromBuildIdAndBranch()
+version = "0.0.5-pre.2"
 
 preprocess {
     val fabric11903 = createNode("1.19.3-fabric", 11903, "yarn")

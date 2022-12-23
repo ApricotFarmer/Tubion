@@ -11,9 +11,9 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 //#if MC>=11902
-//$$ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 //#else
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+//$$ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 //#endif
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.scoreboard.Scoreboard;
@@ -43,9 +43,9 @@ public class TubionMod implements ClientModInitializer {
 		new TubNet();
 		new FeatureLoader();
 		//#if MC>=11902
-//$$ 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandRegistrar.init(dispatcher));
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandRegistrar.init(dispatcher));
 		//#else
-		CommandRegistrar.init(ClientCommandManager.DISPATCHER);
+//$$ 		CommandRegistrar.init(ClientCommandManager.DISPATCHER);
 		//#endif
 	}
 

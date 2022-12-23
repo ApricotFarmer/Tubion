@@ -9,7 +9,6 @@ public interface ScoreboardUpdateCallback {
     Event<ScoreboardUpdateCallback> EVENT = EventFactory.createArrayBacked(ScoreboardUpdateCallback.class,
             (listeners) -> () -> {
                 try {
-                    TubnetConnectionCallbacks.CONNECTED.invoker().connected();
                     for (ScoreboardUpdateCallback listener : listeners) {
                         listener.interact();
                     }

@@ -13,7 +13,7 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.fabricmc.fabric.impl.resource.loader.ModNioResourcePack;
 //#if MC>=11902
-//$$ import net.minecraft.text.Text;
+import net.minecraft.text.Text;
 //#endif
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class TubnetLogoTexture extends ResourceTexture {
         ModContainer modContainer = FabricLoader.getInstance().getModContainer("tubion").get();
         ModResourcePack resourcePack = ModNioResourcePack.create(
                 //#if MC>=11902
-                //$$ new Identifier("tubion"),
+                new Identifier("tubion"),
                 //#endif
                 //#if MC>=11903
                 //$$ Text.of("Tubion"),
@@ -42,7 +42,7 @@ public class TubnetLogoTexture extends ResourceTexture {
         try {
             InputStream inputStream =
                     //#if MC>=11902
-                    //$$ (InputStream)
+                    (InputStream)
                     //#endif
                     resourcePack.open(ResourceType.CLIENT_RESOURCES, new Identifier("tubion:textures/gui/title/tubnet.png"));
 

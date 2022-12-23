@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface VisibleMessageGetter {
     //#if MC>=11902
-    //$$ List<ChatHudLine.Visible>
+    List<ChatHudLine.Visible>
     //#else
-    List<ChatHudLine>
+    //$$ List<ChatHudLine>
     //#endif
         getVisibleMessages();
 }

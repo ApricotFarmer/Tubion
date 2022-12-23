@@ -52,9 +52,9 @@ public class SplashOverlayMixin {
         } else {
             return () ->
                     //#if MC>=11902
-                    //$$ (Boolean)MinecraftClient.getInstance().options.getMonochromeLogo().getValue()
+                    (Boolean)MinecraftClient.getInstance().options.getMonochromeLogo().getValue()
                     //#else
-                    (Boolean)MinecraftClient.getInstance().options.monochromeLogo
+                    //$$ (Boolean)MinecraftClient.getInstance().options.monochromeLogo
                     //#endif
                             ? MONOCHROME_BLACK : MOJANG_RED;
         }

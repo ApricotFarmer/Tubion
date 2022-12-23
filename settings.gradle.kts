@@ -11,7 +11,6 @@ pluginManagement {
     plugins {
         val egtVersion = "0.1.16" // should be whatever is displayed in above badge
         id("gg.essential.multi-version.root") version egtVersion
-        id("gg.essential.multi-version.api-validation") version egtVersion
     }
 }
 
@@ -24,7 +23,7 @@ listOf(
     project(":$version").apply {
         // This is where the `build` folder and per-version overwrites will reside
         projectDir = file("versions/$version")
-        // All sub-projects get configured by the same `build.gradle.kts.kts` file, the string is relative to projectDir
+        // All sub-projects get configured by the same `build.gradle.kts` file, the string is relative to projectDir
         // You could use separate build files for each project, but usually that would just be duplicating lots of code
         buildFileName = "../../build.gradle.kts"
     }
