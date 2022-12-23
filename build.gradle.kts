@@ -19,6 +19,6 @@ tasks.compileKotlin.setJvmDefault("all")
 loom.noServerRunConfigs()
 
 dependencies {
-	implementation("com.github.JnCrMx:discord-game-sdk4j:master-SNAPSHOT")
-	modImplementation(include("gg.essential:universalcraft-${property("minecraft")}-fabric:251")!!)
+	implementation(include("com.github.JnCrMx:discord-game-sdk4j:master-SNAPSHOT") as Any)
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
 }

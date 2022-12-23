@@ -2,8 +2,7 @@ package io.github.apricotfarmer11.mods.tubion.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
-
-import io.github.apricotfarmer11.mods.tubion.core.FeatureLoader;
+import io.github.apricotfarmer11.mods.tubion.feat.FeatureLoader;
 import io.github.apricotfarmer11.mods.tubion.feat.discord.Discord;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandRegistryAccess;
@@ -27,6 +26,5 @@ public class CommandRegistrar {
                                         )
                         )
         );
-        Command
     }
 }

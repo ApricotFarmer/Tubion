@@ -1,6 +1,8 @@
 package io.github.apricotfarmer11.mods.tubion.config;
 
-import com.google.gson.annotations.SerializedName;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
 public class ModConfig {
     public boolean enableDiscordRPC = true;
