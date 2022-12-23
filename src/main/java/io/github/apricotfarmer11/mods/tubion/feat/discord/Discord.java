@@ -11,7 +11,6 @@ import io.github.apricotfarmer11.mods.tubion.feat.EventType;
 import io.github.apricotfarmer11.mods.tubion.helper.ChatHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,7 @@ public class Discord extends Feature {
     public static Core discord;
     public static boolean enabled = false;
     private static final MutableText BASE = ChatHelper.getChatPrefixWithFeature(
-            Text.literal("Discord").formatted(Formatting.BOLD, Formatting.DARK_PURPLE)
+            TextUtils.literal("Discord").formatted(Formatting.BOLD, Formatting.DARK_PURPLE)
     );
     private int threads = 0;
     private boolean initialized = false;
@@ -81,16 +80,16 @@ public class Discord extends Feature {
         }
     }
     public void reloadClient() {
-        CLIENT.inGameHud.getChatHud().addMessage(BASE.copy().append("Reconnecting to Discord"));
+        CLIENT.inGameHud.getChatHud().addMessage(BASE.shallowCopy().append("Reconnecting to Discord"));
         if (discord != null && discord.isOpen()) {
             discord.close();
             discord = null;
             initialized = false;
         }
         if (initializeRPC()) {
-            CLIENT.inGameHud.getChatHud().addMessage(BASE.copy().append("Connected to Discord"));
+            CLIENT.inGameHud.getChatHud().addMessage(BASE.shallowCopy().append("Connected to Discord"));
         } else {
-            CLIENT.inGameHud.getChatHud().addMessage(this.BASE.copy().append("Failed to connect to Discord. Run ").append(Text.literal("/tubion discord reconnect").formatted(Formatting.BOLD).append(" to attempt to reconnect.")));
+            CLIENT.inGameHud.getChatHud().addMessage(this.BASE.shallowCopy().append("Failed to connect to Discord. Run ").append(TextUtils.literal("/tubion discord reconnect").formatted(Formatting.BOLD).append(" to attempt to reconnect.")));
         }
     }
     public void onTitleSet() {
@@ -119,7 +118,7 @@ public class Discord extends Feature {
             LOGGER.error("An error occurred while attempting to initialize the SDK:\n" + ex.toString());
             initialized = false;
             assert MinecraftClient.getInstance().player != null;
-            CLIENT.inGameHud.getChatHud().addMessage(this.BASE.copy().append("Failed to connect to Discord. Run ").append(Text.literal("/tubion discord reconnect").formatted(Formatting.BOLD).append(" to attempt to reconnect.")));
+            CLIENT.inGameHud.getChatHud().addMessage(this.BASE.shallowCopy().append("Failed to connect to Discord. Run ").append(TextUtils.literal("/tubion discord reconnect").formatted(Formatting.BOLD).append(" to attempt to reconnect.")));
             return false;
         }
     }

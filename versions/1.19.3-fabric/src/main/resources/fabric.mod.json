@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Tubion",
-  "description": "All-in-one utility mod for TubNet.",
+  "description": "All-in-one utility mod for TubNet",
   "authors": [
     "ApricotFarmer11",
     "Callum_Is_Bad"
@@ -31,11 +31,11 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.6",
-    "fabric": "*",
-    "minecraft": "~1.18.2",
+    "fabricloader": ">=0.14.11",
+    "fabric": ">=0.68.1",
+    "minecraft": "~1.19.3",
     "java": ">=17",
-    "cloth-config2": ">=6.3.81"
+    "cloth-config2": ">=9.0.94"
   },
   "custom": {
     "modmenu": {

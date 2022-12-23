@@ -50,7 +50,13 @@ public class SplashOverlayMixin {
         if ((TubNet.connecting || TubNet.connected) && ClothConfigIntegration.INSTANCE.customLoadingScreen) {
             return () -> TUBNET_BLUE;
         } else {
-            return () -> (Boolean)MinecraftClient.getInstance().options.getMonochromeLogo().getValue() ? MONOCHROME_BLACK : MOJANG_RED;
+            return () ->
+                    //#if MC>=11902
+                    //$$ (Boolean)MinecraftClient.getInstance().options.getMonochromeLogo().getValue()
+                    //#else
+                    (Boolean)MinecraftClient.getInstance().options.monochromeLogo
+                    //#endif
+                            ? MONOCHROME_BLACK : MOJANG_RED;
         }
     }
 }

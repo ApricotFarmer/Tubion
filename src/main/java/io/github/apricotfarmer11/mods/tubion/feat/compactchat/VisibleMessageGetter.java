@@ -5,5 +5,10 @@ import net.minecraft.client.gui.hud.ChatHudLine;
 import java.util.List;
 
 public interface VisibleMessageGetter {
-    List<ChatHudLine.Visible> getVisibleMessages();
+    //#if MC>=11902
+    //$$ List<ChatHudLine.Visible>
+    //#else
+    List<ChatHudLine>
+    //#endif
+        getVisibleMessages();
 }

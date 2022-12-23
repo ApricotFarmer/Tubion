@@ -17,8 +17,18 @@ public class DataTrackerMixin {
     private Entity trackedEntity;
 
     @Inject(at = @At("HEAD"), method = "copyToFrom", cancellable = true)
-    private <T> void copyToFrom(DataTracker.Entry<T> to, DataTracker.Entry<?> from, CallbackInfo ci) {
-        if (!Objects.equals(from.getData().getType(), to.getData().getType()) && TubionMod.getConfig().hideEntityDataErrors) {
+    //#if MC<=11902
+    private <T> void copyToFrom(DataTracker.Entry<T> from, DataTracker.Entry<?> to, CallbackInfo ci) {
+    //#else
+    //$$ private <T> void copyToFrom(DataTracker.Entry<T> from, DataTracker.SerializedEntry<?> serializedEntry, CallbackInfo ci) {
+    //#endif
+        if (!Objects.equals(
+                //#if MC<=11902
+                to.getData().getType(),
+                //#else
+                //$$ serializedEntry.handler(),
+                //#endif
+                from.getData().getType()) && TubionMod.getConfig().hideEntityDataErrors) {
             ci.cancel();
         }
     }
