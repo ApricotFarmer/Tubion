@@ -19,6 +19,19 @@ public class ModMenuIntegration implements ModMenuApi {
                 .setTransparentBackground(true)
                 .setSavingRunnable(ClothConfigIntegration::updateJSON);
 
+        // LOBBY CATEGORY
+        ConfigCategory lobbyCategory = configBuilder.getOrCreateCategory(TextUtils.translatable("text.tubion.settings.lobby.title"));
+
+        lobbyCategory.addEntry(
+                configBuilder.entryBuilder()
+                        .startBooleanToggle(TextUtils.translatable("text.tubion.settings.lobby.hideDuplicateWelcomeMessage"), ClothConfigIntegration.INSTANCE.hideWelcomeMessage)
+                        .setDefaultValue(true)
+                        .setTooltip(TextUtils.translatable("text.tubion.settings.lobby.hideDuplicateWelcomeMessage.tooltip"))
+                        .setSaveConsumer(val -> {
+                            ClothConfigIntegration.INSTANCE.hideWelcomeMessage = val;
+                        })
+                        .build()
+        );
         // BATTLE ROYALE CATEGORY
         ConfigCategory battleRoyaleCategory = configBuilder.getOrCreateCategory(TextUtils.translatable("text.tubion.settings.battleRoyale.title"));
 

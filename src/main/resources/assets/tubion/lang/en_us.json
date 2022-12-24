@@ -1,6 +1,10 @@
 {
   "text.tubion.settings.title": "Tubion Settings",
 
+  "text.tubion.settings.lobby.title": "Lobby",
+  "text.tubion.settings.lobby.hideDuplicateWelcomeMessage": "Hide duplicate welcome message",
+  "text.tubion.settings.lobby.hideDuplicateWelcomeMessage.tooltip": "When you join a lobby, the welcome message might pop-up again.",
+
   "text.tubion.settings.battleRoyale.title": "Battle Royale",
   "text.tubion.settings.battleRoyale.hideWoolLimitMessage": "Hide wool limit message",
   "text.tubion.settings.battleRoyale.hideWoolLimitMessage.tooltip": "Hides the annoying message when you try to pick up other\nblocks when you have already reached the limit",

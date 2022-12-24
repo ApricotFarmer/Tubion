@@ -15,6 +15,7 @@ public class ModConfig {
     public boolean hideWoolLimitMessage = true;
     public boolean customLoadingScreen = true;
     public boolean customPanorama = true;
+    public boolean hideWelcomeMessage = true;
 
 
     public enum TubnetTweaksPackTypes {
