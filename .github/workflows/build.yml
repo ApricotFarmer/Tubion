@@ -37,9 +37,9 @@ jobs:
           ./gradlew :1.19.3-fabric:build
       - name: Capture Build Artifacts
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: Compiled MC
+          name: Tubion Binaries
           path: |
             versions/*/build/libs/*.jar
             !versions/*/build/libs/*-dev.jar
