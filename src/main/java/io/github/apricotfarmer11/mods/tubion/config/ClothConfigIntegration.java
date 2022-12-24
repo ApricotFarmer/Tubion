@@ -33,9 +33,10 @@ public class ClothConfigIntegration {
                     writer.write(json);
                     writer.close();
                 } catch(IOException ex) {
-                    throw new IllegalStateException("(Tubion) [Config] Failed to create '.minecraft/config/tubion.config.json'");
+                    throw new IllegalStateException("(Tubion) [Config] Failed to create '.minecraft/config/tubion/tubion.config.json'");
                 }
             }
+            readJson();
         } else {
             throw new IllegalStateException("(Tubion) [Config] '.minecraft/config/tubion' MUST be a folder, not a file!");
         }
