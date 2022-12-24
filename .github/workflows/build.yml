@@ -26,14 +26,21 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
-      - name: make gradle wrapper executable
+      - name: Make wrapper executable
         if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlew
-      - name: build
-        run: ./gradlew build
-      - name: capture build artifacts
+      - name: Build
+        run: |
+          ./gradlew
+          ./gradlew :1.18.2-fabric:build
+          ./gradlew :1.19.2-fabric:build
+          ./gradlew :1.19.3-fabric:build
+      - name: Capture Build Artifacts
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: Artifacts
-          path: build/libs/
+          name: Tubion Binaries
+          path: |
+            versions/*/build/libs/*.jar
+            !versions/*/build/libs/*-dev.jar
+            !versions/*/build/libs/*-sources.jar

@@ -45,7 +45,7 @@ public class TubNet {
         });
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             InetSocketAddress socketAddress = (InetSocketAddress) handler.getConnection().getAddress();
-            if (socketAddress.getHostName().matches("((.*)\\.)?tubnet\\.gg")) {
+            if (socketAddress.getHostName().matches("^((.*)\\.)?tubnet\\.gg$")) {
                 connecting = false;
                 connected = true;
                 LOGGER.info("Connected to TubNet (phase: play)[OK]");

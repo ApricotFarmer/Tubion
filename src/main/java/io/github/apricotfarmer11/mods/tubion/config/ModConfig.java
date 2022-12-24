@@ -1,6 +1,9 @@
 package io.github.apricotfarmer11.mods.tubion.config;
 
 import com.google.gson.annotations.SerializedName;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
 public class ModConfig {
     public boolean enableDiscordRPC = true;
@@ -12,6 +15,7 @@ public class ModConfig {
     public boolean hideWoolLimitMessage = true;
     public boolean customLoadingScreen = true;
     public boolean customPanorama = true;
+    public boolean hideWelcomeMessage = true;
 
 
     public enum TubnetTweaksPackTypes {

@@ -18,6 +18,7 @@ public class ClientPlayerEntityMixin {
     @Shadow
     public ClientPlayNetworkHandler networkHandler;
 
+    //#if MC==11902
     @Inject(at = @At("HEAD"), method = "sendChatMessageInternal", cancellable = true)
     public void sendChatMessage(String message, @Nullable Text preview, CallbackInfo ci) {
         if (ClientSendMessageCallback.EVENT.invoker().interact(message) != ActionResult.PASS) {
@@ -25,4 +26,13 @@ public class ClientPlayerEntityMixin {
             ci.cancel();
         }
     }
+    //#elseif MC<=11802
+    //$$ @Inject(at = @At("HEAD"), method = "sendChatMessage", cancellable = true)
+    //$$ public void sendChatMessage(String message, CallbackInfo ci) {
+    //$$      if (ClientSendMessageCallback.EVENT.invoker().interact(message) != ActionResult.PASS) {
+    //$$            MixinHelper.LOGGER.info("Cancelling message: " + message);
+    //$$            ci.cancel();
+    //$$      }
+    //$$ }
+    //#endif
 }

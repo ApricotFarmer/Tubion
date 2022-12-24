@@ -6,6 +6,7 @@ import io.github.apricotfarmer11.mods.tubion.feat.EventType;
 import io.github.apricotfarmer11.mods.tubion.feat.battleroyalewoollimit.WoolLimit;
 import io.github.apricotfarmer11.mods.tubion.feat.compactchat.CompactChat;
 import io.github.apricotfarmer11.mods.tubion.feat.discord.Discord;
+import io.github.apricotfarmer11.mods.tubion.feat.hidetubnetwelcomemessage.HideTubNetWelcomeMsg;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.util.ActionResult;
@@ -44,6 +45,10 @@ public class FeatureLoader {
         features.put(
                 "wool_limit",
                 new WoolLimit()
+        );
+        features.put(
+                "hide_welcome_message",
+                new HideTubNetWelcomeMsg()
         );
     }
     public boolean isFeatureEnabled(String id) {
