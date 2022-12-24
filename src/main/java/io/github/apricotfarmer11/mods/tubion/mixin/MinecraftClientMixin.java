@@ -1,5 +1,6 @@
 package io.github.apricotfarmer11.mods.tubion.mixin;
 import io.github.apricotfarmer11.mods.tubion.TubionMod;
+import io.github.apricotfarmer11.mods.tubion.core.TubNet;
 import io.github.apricotfarmer11.mods.tubion.feat.tubnettweaks.TubnetTweaks;
 import net.fabricmc.fabric.api.resource.ModResourcePack;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -34,7 +35,7 @@ public abstract class MinecraftClientMixin {
         ServerInfo entry = this.getCurrentServerEntry();
         final List<ResourcePack> packs1 = new ArrayList<>(packs);
         if (entry != null) {
-            if (entry.address.endsWith("tubnet.gg") && TubionMod.getConfig().enableTubnetTweaks) {
+            if (TubNet.connected && TubionMod.getConfig().enableTubnetTweaks) {
                 ResourcePack tweaks = TubnetTweaks.getTubnetTweaksResourcePack();
                 if (tweaks != null) packs1.add(tweaks);
             }
