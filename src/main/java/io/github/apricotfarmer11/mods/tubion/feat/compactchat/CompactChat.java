@@ -1,5 +1,6 @@
 package io.github.apricotfarmer11.mods.tubion.feat.compactchat;
 
+import io.github.apricotfarmer11.mods.tubion.core.TextUtils;
 import io.github.apricotfarmer11.mods.tubion.core.TubNet;
 import io.github.apricotfarmer11.mods.tubion.event.ReceiveChatMessageCallback;
 import io.github.apricotfarmer11.mods.tubion.feat.EventType;
@@ -30,13 +31,17 @@ public class CompactChat extends Feature {
         if (!TubNet.connected) return ActionResult.PASS;
         ChatHud chat = CLIENT.inGameHud.getChatHud();
         if (lastMessage.equals(text.getString())) {
+            //#if MC>=11902
             List<ChatHudLine.Visible> visibleMessages = ((VisibleMessageGetter) chat).getVisibleMessages();
+            //#else
+            //$$ List<ChatHudLine> visibleMessages = ((VisibleMessageGetter) chat).getVisibleMessages();
+            //#endif
             visibleMessages.remove(0);
             amount++;
             lastMessage = text.getString();
             chat.addMessage(
-                    Text.literal("").append(text)
-                            .append(Text.literal(" (" + amount + ")")
+                    TextUtils.literal("").append(text)
+                            .append(TextUtils.literal(" (" + amount + ")")
                             .formatted(Formatting.DARK_GRAY))
             );
             return ActionResult.CONSUME;

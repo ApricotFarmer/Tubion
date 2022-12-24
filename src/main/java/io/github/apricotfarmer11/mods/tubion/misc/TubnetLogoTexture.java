@@ -1,6 +1,5 @@
 package io.github.apricotfarmer11.mods.tubion.misc;
 
-import io.github.apricotfarmer11.mods.tubion.mixin.SplashOverlayMixin;
 import net.fabricmc.fabric.api.resource.ModResourcePack;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -13,6 +12,9 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.fabricmc.fabric.impl.resource.loader.ModNioResourcePack;
+//#if MC>=11902
+import net.minecraft.text.Text;
+//#endif
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,10 +27,24 @@ public class TubnetLogoTexture extends ResourceTexture {
     protected ResourceTexture.TextureData loadTextureData(ResourceManager resourceManager) {
         MinecraftClient minecraftClient = MinecraftClient.getInstance();
         ModContainer modContainer = FabricLoader.getInstance().getModContainer("tubion").get();
-        ModResourcePack resourcePack = ModNioResourcePack.create(new Identifier("tubion"), "Tubion", modContainer, "", ResourceType.CLIENT_RESOURCES, ResourcePackActivationType.ALWAYS_ENABLED);
+        ModResourcePack resourcePack = ModNioResourcePack.create(
+                //#if MC>=11902
+                new Identifier("tubion"),
+                //#endif
+                //#if MC>=11903
+                //$$ Text.of("Tubion"),
+                //#else
+                "Tubion",
+                //#endif
+                modContainer, "", ResourceType.CLIENT_RESOURCES, ResourcePackActivationType.ALWAYS_ENABLED
+        );
 
         try {
-            InputStream inputStream = resourcePack.open(ResourceType.CLIENT_RESOURCES, new Identifier("tubion:textures/gui/title/tubnet.png"));
+            InputStream inputStream =
+                    //#if MC>=11902
+                    (InputStream)
+                    //#endif
+                    resourcePack.open(ResourceType.CLIENT_RESOURCES, new Identifier("tubion:textures/gui/title/tubnet.png"));
 
             ResourceTexture.TextureData var5;
             try {

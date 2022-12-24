@@ -3,15 +3,18 @@ package io.github.apricotfarmer11.mods.tubion;
 import io.github.apricotfarmer11.mods.tubion.commands.CommandRegistrar;
 import io.github.apricotfarmer11.mods.tubion.config.ClothConfigIntegration;
 import io.github.apricotfarmer11.mods.tubion.config.ModConfig;
+import io.github.apricotfarmer11.mods.tubion.core.TextUtils;
 import io.github.apricotfarmer11.mods.tubion.core.TubNet;
 import io.github.apricotfarmer11.mods.tubion.event.tubnet.TubnetConnectionCallbacks;
 import io.github.apricotfarmer11.mods.tubion.core.FeatureLoader;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
+//#if MC>=11902
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+//#else
+//$$ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+//#endif
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
@@ -39,7 +42,11 @@ public class TubionMod implements ClientModInitializer {
 		// Init FeatureLoader
 		new TubNet();
 		new FeatureLoader();
-		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandRegistrar.init(dispatcher, registryAccess));
+		//#if MC>=11902
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandRegistrar.init(dispatcher));
+		//#else
+//$$ 		CommandRegistrar.init(ClientCommandManager.DISPATCHER);
+		//#endif
 	}
 
 
@@ -49,7 +56,7 @@ public class TubionMod implements ClientModInitializer {
 				if (client.player != null) {
 					Scoreboard board = client.player.getScoreboard();
 					if (board != null) {
-						scoreboard = board.getAllPlayerScores(board.getObjectiveForSlot(1)).stream().map((ScoreboardPlayerScore score) -> Team.decorateName(board.getPlayerTeam(score.getPlayerName()), Text.literal(score.getPlayerName())).getString().replaceAll("\\�r", "").replaceAll("\\? ", "")).toArray();
+						scoreboard = board.getAllPlayerScores(board.getObjectiveForSlot(1)).stream().map((ScoreboardPlayerScore score) -> Team.decorateName(board.getPlayerTeam(score.getPlayerName()), TextUtils.literal(score.getPlayerName())).getString().replaceAll("\\�r", "").replaceAll("\\? ", "")).toArray();
 					}
 				}
 			}

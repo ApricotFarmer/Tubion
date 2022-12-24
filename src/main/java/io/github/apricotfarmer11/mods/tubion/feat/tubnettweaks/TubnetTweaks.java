@@ -37,7 +37,11 @@ public class TubnetTweaks extends Feature {
             downloadFN = "tubnet-tweaks-christmas.zip";
         }
         File zipLocation = new File("config/tubion/tubnet-tweaks/" + downloadFN);
+        //#if MC>=11903
+        //$$ return new ZipResourcePack(downloadFN, zipLocation, false);
+        //#else
         return new ZipResourcePack(zipLocation);
+        //#endif
     }
 
     private static void checkAndDownloadResourcePack() throws Exception {
